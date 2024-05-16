@@ -1,6 +1,6 @@
 import { get } from "http";
 import { request } from 'http';
-const base_url = "http://app.snookerpocket.online";
+const base_url = "https://app.snookerpocket.online";
 const port = 443;
 const klassementUrl = `${base_url}:${port}/api/speeldagen/`;
 const usersUrl = `${base_url}:${port}/api/users/`;
