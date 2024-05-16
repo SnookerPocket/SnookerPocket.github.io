@@ -23,7 +23,7 @@ export default function SignupForm() {
         }
         console.log(username, email, password);
         try {
-            const response = await fetch("http://localhost:3001/api/users/", {
+            const response = await fetch("http://app.snookerpocket.online:443/api/users/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
