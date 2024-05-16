@@ -1,6 +1,6 @@
 import { get } from "http";
 import { request } from 'http';
-const base_url = "http://20.93.2.27";
+const base_url = "http://localhost";
 const port = 3001;
 const klassementUrl = `${base_url}:${port}/api/speeldagen/`;
 const usersUrl = `${base_url}:${port}/api/users/`;
@@ -178,7 +178,7 @@ export function getAllUsers() {
 export function updateUserBetaald(userId, newBetaaldValue) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: '20.93.2.27',
+      hostname: 'localhost',
       port: port,
       path: `/api/users/${userId}`,
       method: 'PATCH',
@@ -193,7 +193,7 @@ export function updateUserBetaald(userId, newBetaaldValue) {
         responseData += chunk;
       });
       res.on('end', () => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 201) {
           resolve(JSON.parse(responseData));
         } else {
           reject(new Error(`Failed to update user ${userId}. Status code: ${res.statusCode}`));
@@ -283,7 +283,7 @@ export function putSpeeldagVote(obj, speeldagId){
 export function postWedstrijd(date, thuis, uit, speeldagId) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: '20.93.2.27',
+      hostname: 'localhost',
       port: port,
       path: `/api/speeldagen/${speeldagId}/wedstrijden`,
       method: 'POST',
@@ -327,7 +327,7 @@ export function postWedstrijd(date, thuis, uit, speeldagId) {
 export function patchWedstrijd(date, thuis, uit, resultaat, wedstrijdId, seizoenId) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: '20.93.2.27',
+      hostname: 'localhost',
       port: port,
       path: `/api/wedstrijden/${wedstrijdId}`,
       method: 'PATCH',
@@ -413,10 +413,53 @@ export function patchSpeeldag(schiftingsvraag,schiftingsantwoord, startDatum, ei
   });
 }
 
+export function beeindigSeizoen(seizoenId) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'localhost',
+      port: port,
+      path: `/api/seizoenen/${seizoenId}`,
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const seizoenData = {
+      seizoenBeeindigd: true
+    };
+    const data = JSON.stringify(seizoenData);
+
+    const req = request(options, (res) => {
+      let responseData = '';
+
+      res.on('data', (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on('end', () => {
+        if (res.statusCode === 201) {
+          resolve(JSON.parse(responseData));
+        } else {
+          reject(new Error(`Failed to patch seizoen: ${res.statusCode}`));
+        }
+      });
+    });
+
+    req.on('error', (error) => {
+      reject(error);
+    });
+
+    req.write(data);
+    req.end();
+  });
+}
+
+
 export function postSpeeldag(schiftingsvraag, schiftingsantwoord, startDatum, einddatum, seizoenId ) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: '20.93.2.27',
+      hostname: 'localhost',
       port: port,
       path: `/api/seizoenen/${seizoenId}/speeldagen`,
       method: 'POST',
@@ -464,7 +507,7 @@ export function postSpeeldag(schiftingsvraag, schiftingsantwoord, startDatum, ei
 export function deleteWedstrijd(wedstrijdId) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: '20.93.2.27',
+      hostname: 'localhost',
       port: port,
       path: `/api/wedstrijden/${wedstrijdId}`,
       method: 'DELETE',
@@ -503,7 +546,6 @@ export function patchSpeeldagVote(obj, speeldagVoteId) {
         'Content-Type': 'application/json'
       }
     };
-
     const data = JSON.stringify(obj);
 
     const req = request(options, (res) => {
