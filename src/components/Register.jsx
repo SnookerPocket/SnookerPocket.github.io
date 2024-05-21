@@ -21,7 +21,6 @@ export default function SignupForm() {
             setRegistratieFailed(null);
             setPasswordError(true);
         }
-        console.log(username, email, password);
         try {
             const response = await fetch("https://app.snookerpocket.online:443/api/users/", {
                 method: "POST",
@@ -33,7 +32,6 @@ export default function SignupForm() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("Registratie is gelukt met response:", data);
                 window.location.href = "/login";
             } else {
                 setRegistratieFailed("Dit gebruikersnaam of e-mailadres is bezet");
