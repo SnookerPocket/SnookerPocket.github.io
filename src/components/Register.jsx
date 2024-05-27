@@ -22,7 +22,7 @@ export default function SignupForm() {
             setPasswordError(true);
         }
         try {
-            const response = await fetch("https://app.snookerpocket.online:443/api/users/", {
+            const response = await fetch("http://localhost:3001/api/users/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

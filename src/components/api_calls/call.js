@@ -1,7 +1,7 @@
 import { get } from "http";
 import { request } from 'http';
-const base_url = "https://app.snookerpocket.online";
-const port = 443;
+const base_url = "http://localhost";
+const port = 3001;
 const klassementUrl = `${base_url}:${port}/api/speeldagen/`;
 const usersUrl = `${base_url}:${port}/api/users/`;
 const seizoenenUrl = `${base_url}:${port}/api/seizoenen`;
@@ -178,7 +178,7 @@ export function getAllUsers() {
 export function updateUserBetaald(userId, newBetaaldValue) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'app.snookerpocket.online',
+      hostname: 'localhost',
       port: port,
       path: `/api/users/${userId}`,
       method: 'PATCH',
@@ -284,7 +284,7 @@ export function putSpeeldagVote(obj, speeldagId){
 export function postWedstrijd(date, thuis, uit, speeldagId) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'app.snookerpocket.online',
+      hostname: 'localhost',
       port: port,
       path: `/api/speeldagen/${speeldagId}/wedstrijden`,
       method: 'POST',
@@ -330,7 +330,7 @@ export async function patchWedstrijd(date, thuis, uit, resultaat, wedstrijdId, s
   console.log("patching wedstrijd");
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'app.snookerpocket.online',
+      hostname: 'localhost',
       port: port,
       path: `/api/wedstrijden/${wedstrijdId}`,
       method: 'PATCH',
@@ -509,7 +509,7 @@ export function patchSpeeldag(schiftingsvraag,schiftingsantwoord, startDatum, ei
 export function beeindigSeizoen(seizoenId) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'app.snookerpocket.online',
+      hostname: 'localhost',
       port: port,
       path: `/api/seizoenen/${seizoenId}`,
       method: 'PATCH',
@@ -552,7 +552,7 @@ export function beeindigSeizoen(seizoenId) {
 export function postSpeeldag(schiftingsvraag, schiftingsantwoord, startDatum, einddatum, seizoenId ) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'app.snookerpocket.online',
+      hostname: 'localhost',
       port: port,
       path: `/api/seizoenen/${seizoenId}/speeldagen`,
       method: 'POST',
@@ -600,7 +600,7 @@ export function postSpeeldag(schiftingsvraag, schiftingsantwoord, startDatum, ei
 export function deleteWedstrijd(wedstrijdId) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'app.snookerpocket.online',
+      hostname: 'localhost',
       port: port,
       path: `/api/wedstrijden/${wedstrijdId}`,
       method: 'DELETE',
