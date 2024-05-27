@@ -22,7 +22,7 @@ export default function Index(props) {
         }
 
         try {
-            const response = await fetch("https://app.snookerpocket.online:3001/api/auth/login", {
+            const response = await fetch("https://app.snookerpocket.online:443/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
