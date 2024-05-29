@@ -79,7 +79,7 @@ export default function Users() {
                 checked={user.betaald}
                 onChange={(e) => handleCheckboxChange(e, user._id)}
               />
-              <label htmlFor={user._id}>Betaald</label>
+              <label htmlFor={user._id}> toegang</label>
             </span>
           </p>
         </div>

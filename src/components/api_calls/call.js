@@ -639,6 +639,7 @@ export function patchSpeeldagVote(obj, speeldagVoteId) {
         'Content-Type': 'application/json'
       }
     };
+    obj = { ...obj, user: localStorage.getItem('userID') };
     const data = JSON.stringify(obj);
 
     const req = request(options, (res) => {

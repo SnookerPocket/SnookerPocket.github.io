@@ -10,7 +10,8 @@ export default function WedstrijdPanel({ speeldag_id }) {
     selectedOptions: [],
     jokerChecked: false,
     schiftingsAntwoord: '',
-    speeldagVoteID: {}
+    speeldagVoteID: {},
+    aantalJokers: null,
   });
 
   useEffect(() => {
@@ -30,11 +31,13 @@ export default function WedstrijdPanel({ speeldag_id }) {
   const fetchUserVotes = async () => {
     try {
       const speeldagVotes = await getUserVotesBySpeeldagId(speeldag_id);
+      console.log("speeldagvotes",speeldagVotes)
       setState(prevState => ({
         ...prevState,
         speeldagVoteID: speeldagVotes._id ,
         jokerChecked: speeldagVotes.jokerGebruikt,
         schiftingsAntwoord: speeldagVotes.SchiftingsvraagAntwoord,
+        aantalJokers: speeldagVotes.aantalJokers,
       }));
 
       if (speeldagVotes.wedstrijdVotes && speeldagVotes.wedstrijdVotes.length > 0) {
@@ -62,7 +65,10 @@ export default function WedstrijdPanel({ speeldag_id }) {
   };
 
   const handleJokerChange = (event) => {
-    setState(prevState => ({ ...prevState, jokerChecked: event.target.checked }));
+    if(state.aantalJokers === 0 && event.target.checked) {  
+      return;
+    }
+    setState(prevState => ({ ...prevState, jokerChecked: event.target.checked, aantalJokers: event.target.checked ? prevState.aantalJokers - 1 : prevState.aantalJokers + 1}));
   };
 
   const handleSchiftingsvraagChange = (event) => {
@@ -125,6 +131,7 @@ const VotePanel = ({ state, handleOptionChange, onJokerChange, onSchiftingsVraag
         wedstrijdVotes: state.selectedOptions,
         jokerGebruikt: state.jokerChecked,
         SchiftingsvraagAntwoord: state.schiftingsAntwoord,
+        aantalJokers: state.aantalJokers,
       };
       if(state.speeldagVoteID){
         await patchSpeeldagVote(data, state.speeldagVoteID);
@@ -196,7 +203,7 @@ const VotePanel = ({ state, handleOptionChange, onJokerChange, onSchiftingsVraag
           ) 
           : (
             <tr>
-              <td colSpan="4">Je kan niet stemmen wat je hebt nog niet betaald.</td>
+              <td colSpan="4">Je hebt geen toegang om te stemmen</td>
             </tr>
           )}
         </tbody>
@@ -233,6 +240,7 @@ const JokerEnSchiftingsvraagPanel = ({ state, onJokerChange, onSchiftingsVraagCh
     <>
       <h2>vul schiftingsvraag in</h2>
       <div className="jokerContainer checkbox-wrapper-13">
+        <p>Aantal beschikbare jokers: {state.aantalJokers}</p>
         <label htmlFor="c1-13">Gebruik joker?</label>
         <input
           type="checkbox"
@@ -265,14 +273,14 @@ const VoteResultPanel = ({ state }) => {
   console.log(state.selectedOptions);
   const renderCircle = (matchResult, selectedVote, voteSign) => {
     let backgroundColor;
-    console.log(matchResult, selectedVote, voteSign);
-    if (matchResult === selectedVote?.toUpperCase() && matchResult === voteSign) {
+    voteSign = voteSign.toLowerCase();
+    if (matchResult.toLowerCase() === selectedVote?.toLowerCase() && matchResult === voteSign) {
       backgroundColor = "lime"; // Correct vote
     }
-    else if (matchResult !== selectedVote?.toUpperCase() && selectedVote?.toUpperCase() === voteSign) {
+    else if (matchResult.toLowerCase() !== selectedVote?.toLowerCase() && selectedVote?.toLowerCase() === voteSign) {
       backgroundColor = "blue"; // Incorrect vote
     }
-    else if (matchResult !== selectedVote?.toUpperCase() && matchResult === voteSign) {
+    else if (matchResult.toLowerCase() !== selectedVote?.toLowerCase() && matchResult === voteSign) {
       backgroundColor = "red"; // Not selected and not correct
     }
     else {
@@ -334,7 +342,7 @@ const VoteResultPanel = ({ state }) => {
             
           ) : (
             <tr>
-              <td colSpan="4">Je kan niet stemmen wat je hebt nog niet betaald.</td>
+              <td colSpan="4">Je hebt geen toegang om te stemmen</td>
             </tr>
           )}
         </tbody>
